@@ -61,13 +61,11 @@ class KalmanFilter():
 			Ax= num.matmul(self.A, self.xpost)
 			Bw = self.B*gyro_data
 			self.xpri= Ax + Bw
-			#print(self.xpri)
 
 			AP= num.matmul(self.A, self.Ppost)
 			AT=self.A.transpose()
 			APAT=num.matmul(AP, AT)
 			self.Ppri = APAT + self.Q
-			#print(self.Ppri)
 
 			#faza korekcji
 			# eps i S to macierze pomocnicze
@@ -75,27 +73,22 @@ class KalmanFilter():
 
 			Cx = num.matmul(self.C, self.xpri)
 			eps = Y-Cx
-			#print(eps)
 
 			CP= num.matmul(self.C, self.Ppri)
 			CT= self.C.transpose()
 			CPCT = num.matmul(CP,CT)
 			S = CPCT + self.W
-			#print(S)
 
 			PCT=num.matmul(self.Ppri, CT)
 			K=PCT/S
-			#print(K)
-
+			
 			Keps = num.matmul(K,eps)
 			self.xpost = self.xpri + Keps
-			#print(self.xpost)
 
 			KT=K.transpose()
 			KSKT = num.matmul(K*S, KT)
 			self.Ppost = self.Ppri - KSKT
-			#print(self.Ppost)
-			#print("\n")
+		
 		return self.xpri
 
 	def test(self):
